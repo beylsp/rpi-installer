@@ -792,12 +792,17 @@ echo "  init_system = $init_system"
 echo "  hostname = $hostname"
 echo "  domainname = $domainname"
 echo "  rootpw = $rootpw"
+<<<<<<< HEAD
 echo "  root_ssh_pubkey = $root_ssh_pubkey"
 echo "  disable_root = $disable_root"
 echo "  username = $username"
 echo "  userpw = $userpw"
 echo "  user_ssh_pubkey = $user_ssh_pubkey"
 echo "  user_is_admin = $user_is_admin"
+=======
+echo "  user = $user"
+echo "  userpw = $userpw"
+>>>>>>> Script sets hostname and creates a user account
 echo "  cdebootstrap_cmdline = $cdebootstrap_cmdline"
 echo "  boot_volume_label = $boot_volume_label"
 echo "  bootsize = $bootsize"
@@ -1057,6 +1062,12 @@ if [ ! -z "$username" ]; then
         fi
     fi
 fi
+
+# allow default user login
+echo -n "  Creating default user... "
+chroot /rootfs useradd -m -s /bin/bash $user
+echo -n $user:$userpw | chroot /rootfs /usr/sbin/chpasswd || fail
+echo "OK"
 
 # default mounts
 echo -n "  Configuring /etc/fstab... "
