@@ -6,14 +6,9 @@ LOGFILE=/tmp/raspbian-ua-netinst.log
 preset=server
 packages=
 mirror=http://mirrordirector.raspbian.org/raspbian/
-<<<<<<< HEAD
 release=buster
 init_system=systemd
 hostname=pi
-=======
-release=wheezy
-hostname=airboy
->>>>>>> Change default hostname
 boot_volume_label=
 domainname=
 rootpw=raspbian
