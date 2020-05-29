@@ -141,11 +141,11 @@ def run(command, capture=False, shell=None):
     return out
 
 
-def build():
+def build(configdir):
     """Wrapper function around build scripts."""
     result = run('./clean.sh')
     exit_if_failed(result)
-    result = run('./build.sh')
+    result = run('./build.sh %s' % configdir)
     exit_if_failed(result)
     result = sudo('./buildroot.sh')
     exit_if_failed(result)
@@ -171,6 +171,15 @@ def parse_command_line():
     """Configure and parse our command line flags."""
     parser = argparse.ArgumentParser()
     parser.add_argument(
+        '-c', '--config-dir',
+        default='config',
+        help='Directory with config files')
+    parser.add_argument(
+        '--no-flash',
+        action='store_true',
+        default=False,
+        help='Skip flashing to sd card (only build images)')
+    parser.add_argument(
         '--debug',
         action='store_true',
         default=False,
@@ -190,12 +199,13 @@ def configure_logging(debug=False):
 
 def main():
     """First build, then flash it onto the selected device."""
-    config = parse_command_line()
-    configure_logging(debug=config.debug)
-    raw_input('Insert your SD card and press any key to continue...')
-    build()
-    dev = select_device()
-    flash(dev)
+    opts = parse_command_line()
+    configure_logging(debug=opts.debug)
+    build(opts.config_dir)
+    if not opts.no_flash:
+        raw_input('Insert your SD card and press any key to continue...')
+        dev = select_device()
+        flash(dev)
     print('Done!')
 
 

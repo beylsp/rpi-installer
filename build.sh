@@ -615,6 +615,15 @@ function create_cpio {
 }
 
 # start
+if [[ $# -lt 1 ]]; then
+  BASE_DIR=.
+else
+  BASE_DIR=$1
+fi
+INSTALLER_CONFIG=${BASE_DIR}/installer-config.txt
+POST_INSTALL_CONFIG=${BASE_DIR}/post-install.txt
+CONFIG_DIR=${BASE_DIR}/config
+
 if [ ! -d packages ]; then
     . ./update.sh
 fi
@@ -683,17 +692,17 @@ rm -rf tmp
 
 echo "consoleblank=0 console=ttyAMA0,115200 kgdboc=ttyAMA0,115200" > bootfs/cmdline.txt
 
-if [ -f installer-config.txt ]; then
-    cp installer-config.txt bootfs/
+if [ -f ${INSTALLER_CONFIG} ]; then
+    cp ${INSTALLER_CONFIG} bootfs/
 fi
 
-if [ -f post-install.txt ]; then
-    cp post-install.txt bootfs/
+if [ -f ${POST_INSTALL_CONFIG} ]; then
+    cp ${POST_INSTALL_CONFIG} bootfs/
 fi
 
-if [ -d config ] ; then
+if [ -d ${CONFIG_DIR} ] ; then
     mkdir bootfs/config
-    cp -r config/* bootfs/config
+    cp -r ${CONFIG_DIR}/* bootfs/config
 fi
 
 ZIPFILE=raspbian-ua-netinst-$(date +%Y%m%d)-git$(git rev-parse --short "@{0}").zip
