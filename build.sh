@@ -708,4 +708,4 @@ fi
 ZIPFILE=raspbian-ua-netinst-$(date +%Y%m%d)-git$(git rev-parse --short "@{0}").zip
 rm -f "$ZIPFILE"
 
-(cd bootfs && zip -r -9 ../"$ZIPFILE" -- *)
+(mkdir -p out && cd bootfs && zip -r -9 ../out/"$ZIPFILE" -- *)
